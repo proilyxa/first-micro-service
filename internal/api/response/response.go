@@ -17,6 +17,7 @@ var validationTags = map[string]string{
 	"email":        "field %f must be an valid email",
 	"min":          "field %f can't be less than %ts",
 	"max":          "field %f can't be more than %ts",
+	"eqfield":      "must be equal field %ts",
 	"defaultError": "field %f is not valid",
 }
 

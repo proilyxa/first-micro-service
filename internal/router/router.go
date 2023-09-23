@@ -2,6 +2,7 @@ package router
 
 import (
 	"education-project/internal/http/controllers"
+	"education-project/internal/http/middlewares"
 	"education-project/internal/pkg/logger/sl"
 	"education-project/web"
 	"fmt"
@@ -31,12 +32,14 @@ func NewRouter(
 }
 
 func initMiddlewares(r *chi.Mux, log *slog.Logger) {
+	r.Use(middlewares.HeaderInjection)
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.URLFormat)
 	r.Use(sl.ContextWithLogger(log))
 	r.Use(middleware.Timeout(60 * time.Second))
+
 }
 
 func initStaticFileServer(r *chi.Mux) {
