@@ -16,13 +16,10 @@ func initApiRoutes(
 	r.Route("/api", func(r chi.Router) {
 		r.Use(render.SetContentType(render.ContentTypeJSON))
 
-		r.Options("/*", func(writer http.ResponseWriter, request *http.Request) {
-			writer.WriteHeader(200)
-			writer.Write(make([]byte, 0))
+		r.Route("/auth", func(r chi.Router) {
+			r.Post("/register", authController.Register)
+			r.Post("/login", authController.Login)
 		})
-
-		r.Post("/register", authController.Register)
-		r.Post("/login", authController.Login)
 
 		r.Group(func(r chi.Router) {
 			userService := authController.UserService.(*services.UserServiceImpl)

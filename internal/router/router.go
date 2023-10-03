@@ -4,10 +4,11 @@ import (
 	"education-project/internal/http/controllers"
 	"education-project/internal/http/middlewares"
 	"education-project/internal/pkg/logger/sl"
-	"education-project/web"
+	"education-project/react"
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"golang.org/x/exp/slog"
 	"io/fs"
 	"log"
@@ -39,11 +40,18 @@ func initMiddlewares(r *chi.Mux, log *slog.Logger) {
 	r.Use(middleware.URLFormat)
 	r.Use(sl.ContextWithLogger(log))
 	r.Use(middleware.Timeout(60 * time.Second))
-
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           68100,
+	}))
 }
 
 func initStaticFileServer(r *chi.Mux) {
-	staticFs, err := fs.Sub(web.StaticFiles, "dist")
+	staticFs, err := fs.Sub(react.StaticFiles, "dist")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,11 +75,11 @@ func indexHandler(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.URL.Path == "/favicon.svg" {
-		rawFile, _ := web.StaticFiles.ReadFile("dist/favicon.svg")
+		rawFile, _ := react.StaticFiles.ReadFile("dist/vite.svg")
 		resp.Write(rawFile)
 		return
 	}
 
-	rawFile, _ := web.StaticFiles.ReadFile("dist/index.html")
+	rawFile, _ := react.StaticFiles.ReadFile("dist/index.html")
 	resp.Write(rawFile)
 }

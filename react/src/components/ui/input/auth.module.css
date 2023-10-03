@@ -1,0 +1,27 @@
+.input {
+    width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 2px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.btn {
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: deepskyblue;
+    color: white;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #01a2d0;
+}
